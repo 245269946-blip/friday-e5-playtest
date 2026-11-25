@@ -20,6 +20,7 @@ async function originalFile(name) {
   const cache = await caches.open('friday-e5-payload-v1').catch(() => null);
   let index = 0;
   let reader = null;
+  let cacheWrite;
 
   const compressed = new ReadableStream({
     async pull(controller) {
@@ -34,7 +35,7 @@ async function originalFile(name) {
           if (!response) {
             response = await fetch(url);
             if (!response.ok) throw new Error('游戏资源下载失败。请刷新重试。');
-            if (cache) await cache.put(url, response.clone()).catch(() => undefined);
+            if (cache) cacheWrite = cache.put(url, response.clone()).catch(() => undefined);
           }
           reader = response.body.getReader();
         }
@@ -44,6 +45,8 @@ async function originalFile(name) {
           return;
         }
         reader = null;
+        await cacheWrite;
+        cacheWrite = undefined;
       }
     },
     cancel(reason) {

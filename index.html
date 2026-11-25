@@ -204,7 +204,7 @@ const engine = new Engine(GODOT_CONFIG);
         throw new Error('请用新版 Chrome、Edge 或 Firefox 打开试玩。');
       }
       const worker = navigator.serviceWorker;
-      const workerUrl = new URL('./payload-sw.js?v=e122e87c1a0de8d5', location.href);
+      const workerUrl = new URL('./payload-sw.js?v=2849ec34074ce4ee', location.href);
       const matches = () => worker.controller?.scriptURL === workerUrl.href;
       await worker.register(workerUrl);
       if (!matches()) {
